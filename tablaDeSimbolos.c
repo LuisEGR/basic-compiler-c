@@ -10,19 +10,12 @@
 Nodo * cabeza = NULL;
 
 
-// void * operator+ (void * v1, void * v2){
-//   printf("OMG\n");
-//   return NULL;
-// }
-
 void insertarEntero(int entrada, char* nombre)		//Funcion para ingresar una variable tipo int
 {
 	Nodo *nuevo ;
-	nuevo = NuevoNodoint(entrada, 'a', nombre);
+	nuevo = NuevoNodoint(entrada, 'i', nombre);
 	nuevo -> siguiente = cabeza;
 	cabeza = nuevo;
-	//printf("aqui %s \n", cabeza->name);
-	//printf("Insertada");
 }
 
 Nodo* NuevoNodoint(int x, char tipon, char* nuevoname)		//creacion del nodo tipo int
@@ -39,7 +32,7 @@ Nodo* NuevoNodoint(int x, char tipon, char* nuevoname)		//creacion del nodo tipo
 void insertarDoble(double entrada, char* nombre)
 {
 	Nodo *nuevo ;
-	nuevo = NuevoNododob(entrada, 'b', nombre);
+	nuevo = NuevoNododob(entrada, 'd', nombre);
 	nuevo -> siguiente = cabeza;
 	cabeza = nuevo;
 
@@ -64,7 +57,7 @@ void Insertarchar(char* entrada, char* nombre)
 	Nodo *nuevo ;
   // entrada = quitarComillas(entrada);
   // printf("2_El dato: %s\n",entrada );
-	nuevo = NuevoNodochar(entrada, 'c', nombre);
+	nuevo = NuevoNodochar(entrada, 's', nombre);
 	nuevo -> siguiente = cabeza;
 	cabeza = nuevo;
 
@@ -92,7 +85,7 @@ void printError(char * m){
 }
 
 void printWarning(char * m){
-  printf(YELLOW "%s %s\n> ", m, RESETCOL);
+  printf(YELLOW "%s %s\n", m, RESETCOL);
 }
 
 int existe (char* nombre)
@@ -119,7 +112,7 @@ void createInteger(char* nombre, int dato)
 {	// si existe lanza el mensaje de que ya existe la variable
 	int aux;
 	aux= existe(nombre);
-	char tipo = 'a';
+	char tipo = 'i';
 	if(aux==0)
 	{
 		insertarEntero(dato, nombre);
@@ -158,7 +151,7 @@ void createDouble(char* nombre, double dato)
 
 	int aux;
 	aux=existe(nombre);
-	char tipo = 'b';
+	char tipo = 'd';
 	if(aux==0)
 	{
 		insertarDoble(dato, nombre);
@@ -171,20 +164,22 @@ void createDouble(char* nombre, double dato)
 
 
 void showVar(void* v){
+	// printf("show var\n");
   if(v != NULL){//Si se recibió una variable
     Nodo * var =  (Nodo*) v;
     switch (var->tipo) {
-      // case 'a': printf("Variable %s encontrada...TIPO:%d, VALOR: %d\n", var->name, var->tipo, var->dato1);break;
-      // case 'b': printf("Variable %s encontrada...TIPO:%d, VALOR: %lf\n", var->name, var->tipo, var->dato2);break;
-      // case 'c': printf("Variable %s encontrada...TIPO:%d, VALOR: %s\n", var->name, var->tipo, var->dato3);break;
-      case 'a': printf(GREEN "%d\n" RESETCOL, var->dato1); printf("> "); break;
-      case 'b': printf(GREEN "%lf\n" RESETCOL, var->dato2); printf("> ");break;
-      case 'c': printf(GREEN "'%s'\n" RESETCOL, var->dato3); printf("> ");break;
+      // case 'i': printf("Variable %s encontrada...TIPO:%d, VALOR: %d\n", var->name, var->tipo, var->dato1);break;
+      // case 'd': printf("Variable %s encontrada...TIPO:%d, VALOR: %lf\n", var->name, var->tipo, var->dato2);break;
+      // case 's': printf("Variable %s encontrada...TIPO:%d, VALOR: %s\n", var->name, var->tipo, var->dato3);break;
+      case 'i': printf(GREEN "%d\n" RESETCOL, var->dato1); printf("> "); break;
+      case 'd': printf(GREEN "%lf\n" RESETCOL, var->dato2); printf("> ");break;
+      case 's': printf(GREEN "'%s'\n" RESETCOL, var->dato3); printf("> ");break;
     }
   }
 }
 
 void *  getVariable(char* nombre){
+	// printf("get var\n");
   void * nope = NULL;
 	double au=0.0;
 	Nodo * indice;
@@ -198,7 +193,7 @@ void *  getVariable(char* nombre){
 			return (void *)indice;
 		}
 	}
-  printf(BLUE "No existe la variable '%s' ! %s\n> ",nombre, RESETCOL );
+  printf(BLUE "No existe la variable '%s'! %s\n> ",nombre, RESETCOL );
   return nope;
 }
 
@@ -210,7 +205,7 @@ void *  getVariable(char* nombre){
 void setIntegerValue(char* nombre, int dato) 	//Funcion para actualizar el valor de una variable de tipo int
 {
 	char* aux;
-	char t = 'a';
+	char t = 'i';
 	Nodo *indice;
 	for (indice=cabeza; indice != NULL; indice = indice ->siguiente)
 	{
@@ -218,13 +213,13 @@ void setIntegerValue(char* nombre, int dato) 	//Funcion para actualizar el valor
 		if (strcmp(nombre, aux) == 0)
 		{
 			t = indice->tipo;
-			if(t =='a')
+			if(t =='i')
 			{
 				//printf("datos anteriores nombre: %s dato: %d ",indice->name, indice->dato1 );
 				indice->dato1=dato;
 				//printf("variable actualizada nombre: %s dato: %d ",indice->name, indice->dato1 );
 			}
-			else if (t =='b')
+			else if (t =='d')
 			{
 				//printf("datos anteriores nombre: %s dato: %f ",indice->name, indice->dato2 );
 				indice->dato2=(double)dato;
@@ -246,7 +241,7 @@ void setIntegerValue(char* nombre, int dato) 	//Funcion para actualizar el valor
 void setDoubleValue(char* nombre, double dato)	//Funcion para actualizar el valor de una variable de tipo double
 {
 	char* aux;
-	char t='b';
+	char t='d';
 	Nodo *indice;
 	for (indice=cabeza; indice != NULL; indice = indice ->siguiente)
 	{
@@ -254,14 +249,14 @@ void setDoubleValue(char* nombre, double dato)	//Funcion para actualizar el valo
 		if (strcmp(nombre, aux) == 0)
 		{
 			t = indice->tipo;
-			if(t =='b')
+			if(t =='d')
 			{
 				//printf("datos anteriores nombre: %s dato: %f ",indice->name, indice->dato2 );
 				indice->dato2=dato;
 				//printf("variable actualizada nombre: %s dato: %f ",indice->name, indice->dato2 );
 
 			}
-			else if(t =='a')
+			else if(t =='i')
 			{
 				//printf("datos anteriores nombre: %s dato: %d ",indice->name, indice->dato1 );
 				indice->dato1=(int)dato;
@@ -281,7 +276,7 @@ void setDoubleValue(char* nombre, double dato)	//Funcion para actualizar el valo
 void setStringValue(char* nombre, char* dato)		//Funcion para actualizar el valor de una variable de tipo char
 {
 	char* aux;
-	char t = 'c';
+	char t = 's';
 	Nodo *indice;
 	dato =  quitarComillas(dato);
 	//printf("sinco %s", sinco);
@@ -291,7 +286,7 @@ void setStringValue(char* nombre, char* dato)		//Funcion para actualizar el valo
 		if (strcmp(nombre, aux) == 0)
 		{
 			t = indice->tipo;
-			if(t =='c')
+			if(t =='s')
 			{
 				// printf("datos anteriores nombre: %s dato: %s ",indice->name, indice->dato3 );
 				indice->dato3=dato;
@@ -339,11 +334,11 @@ void actualizar(char* nombre, double dato)
 	aux = getTipo(nombre);
 
 
-	if (aux == 'a')
+	if (aux == 'i')
 	{
 		setIntegerValue(nombre, dato);
 	}
-	else if (aux == 'b')
+	else if (aux == 'd')
 	{
 		setDoubleValue(nombre, dato);
 
@@ -395,8 +390,8 @@ char* concat(char* variable, char* variable1)
 
 char * remstr(char * a, char * b) {
 	char ans[MAX];
-  printf("a: %s\n", a);
-  printf("b: %s\n", b);
+  // printf("a: %s\n", a);
+  // printf("b: %s\n", b);
     char *  x = strstr(a, b);
     // printf("x: %s\n", x);
     if (!x) return strdup(a);
@@ -426,9 +421,9 @@ void  _copyValueInteger(char* nombre, void* var){
   // printf("p_%d\n", Variable->dato1);
 	if(!existe(nombre))
 	{
-    if(Variable->tipo == 'a'){insertarEntero(Variable->dato1, nombre);}
-    if(Variable->tipo == 'b'){insertarEntero(Variable->dato2, nombre);}
-    if(Variable->tipo == 'c'){printf("Tipos incompatibles!\n");}
+    if(Variable->tipo == 'i'){insertarEntero(Variable->dato1, nombre);}
+    if(Variable->tipo == 'd'){insertarEntero(Variable->dato2, nombre);}
+    if(Variable->tipo == 's'){printf("Tipos incompatibles!\n");}
 	}
 	else
 	{
@@ -444,9 +439,9 @@ void _copyValueDouble(char* nombre, void* var){
 
 	if(!existe(nombre))
 	{
-    if(Variable->tipo == 'a'){insertarDoble(Variable->dato1, nombre);}
-    if(Variable->tipo == 'b'){insertarDoble(Variable->dato2, nombre);}
-    if(Variable->tipo == 'c'){printf("Tipos incompatibles!\n");}
+    if(Variable->tipo == 'i'){insertarDoble(Variable->dato1, nombre);}
+    if(Variable->tipo == 'd'){insertarDoble(Variable->dato2, nombre);}
+    if(Variable->tipo == 's'){printf("Tipos incompatibles!\n");}
 	}
 	else
 	{
@@ -461,9 +456,9 @@ void  _copyValueString(char* nombre, void* var){
 
 	if(!existe(nombre))
 	{
-    if(Variable->tipo == 'a'){printf("Tipos incompatibles!\n");}
-    if(Variable->tipo == 'b'){printf("Tipos incompatibles!\n");}
-    if(Variable->tipo == 'c'){Insertarchar(Variable->dato3, nombre);}
+    if(Variable->tipo == 'i'){printf("Tipos incompatibles!\n");}
+    if(Variable->tipo == 'd'){printf("Tipos incompatibles!\n");}
+    if(Variable->tipo == 's'){Insertarchar(Variable->dato3, nombre);}
 	}
 	else
 	{
@@ -484,11 +479,11 @@ void  copyValueVar(void* source, void* dest){
 	}
 	else
 	{
-    if(Source->tipo == 'a' && Dest->tipo == 'a'){ Dest->dato1 =  Source->dato1; }
-    else if(Source->tipo == 'a' && Dest->tipo == 'b'){ Dest->dato2 =  Source->dato1;}
-    else if(Source->tipo == 'b' && Dest->tipo == 'a'){ Dest->dato1 =  Source->dato2; printWarning("Posible perdida de precisión real -> entero");}
-    else if(Source->tipo == 'b' && Dest->tipo == 'b'){ Dest->dato2 =  Source->dato2; }
-    else if(Source->tipo == 'c' && Dest->tipo == 'c'){ Dest->dato3 =  strdup(Source->dato3); }
+    if(Source->tipo == 'i' && Dest->tipo == 'i'){ Dest->dato1 =  Source->dato1; }
+    else if(Source->tipo == 'i' && Dest->tipo == 'd'){ Dest->dato2 =  Source->dato1;}
+    else if(Source->tipo == 'd' && Dest->tipo == 'i'){ Dest->dato1 =  Source->dato2; printWarning("Posible perdida de precisión real -> entero");}
+    else if(Source->tipo == 'd' && Dest->tipo == 'd'){ Dest->dato2 =  Source->dato2; }
+    else if(Source->tipo == 's' && Dest->tipo == 's'){ Dest->dato3 =  strdup(Source->dato3); }
     else {printError("Tipos incompatibles!\n");}
 	}
 }
@@ -507,39 +502,39 @@ void * sumarVariables(void * v1, void * v2){
   // printf("V2 tipo: %c, valor: %d\n", V2->tipo, V2->dato1 );
   // void* dummy;
   //char* nm = getNombreDummy();
-  if(V1->tipo == 'a' && V2->tipo == 'a'){
-      dummy->tipo = 'a';
+  if(V1->tipo == 'i' && V2->tipo == 'i'){
+      dummy->tipo = 'i';
       dummy->dato1 = (V1->dato1 +  V2->dato1);
       // printf("%d\n",dummy->dato1);
       return (void *) dummy;
     }
-  if(V1->tipo == 'a' && V2->tipo == 'b'){
-      dummy->tipo = 'b';
+  if(V1->tipo == 'i' && V2->tipo == 'd'){
+      dummy->tipo = 'd';
       dummy->dato2 = (V1->dato1 +  V2->dato2);
       // printf("%lf\n",dummy->dato2);
       return (void *)dummy;
     }
-  if(V1->tipo == 'b' && V2->tipo == 'a'){
-      dummy->tipo = 'b';
+  if(V1->tipo == 'd' && V2->tipo == 'i'){
+      dummy->tipo = 'd';
       dummy->dato2 = (V1->dato2 +  V2->dato1);
       // printf("%lf\n",dummy->dato2);
       return (void *)dummy;
     }
-  if(V1->tipo == 'b' && V2->tipo == 'b'){
-      dummy->tipo = 'b';
+  if(V1->tipo == 'd' && V2->tipo == 'd'){
+      dummy->tipo = 'd';
       dummy->dato2 = (V1->dato2 +  V2->dato2);
       printf("%lf\n",dummy->dato2);
       return (void *)dummy;
     }//Fin sumarVariables
 
-  if(V1->tipo == 'c' && V2->tipo == 'c'){
-      dummy->tipo = 'c';
+  if(V1->tipo == 's' && V2->tipo == 's'){
+      dummy->tipo = 's';
       dummy->dato3 = concat(V1->dato3,V2->dato3);
       // printf("%s\n",dummy->dato3);
       return (void *)dummy;
   }//Fin sumarVariables
 
-  if(V1->tipo == 'c' && (V2->tipo == 'a' || V2->tipo == 'b')){
+  if(V1->tipo == 's' && (V2->tipo == 'i' || V2->tipo == 'd')){
       yyerror("Tipos incompatibles");
       return NULL;
   }//Fin sumarVariables
@@ -556,32 +551,72 @@ void * multiplicarVariables(void * v1, void * v2){
   Nodo * V2 = (Nodo *) v2;
   Nodo * dummy = (Nodo*)malloc(sizeof(Nodo));
 
-  if(V1->tipo == 'a' && V2->tipo == 'a'){
-      dummy->tipo = 'a';
+  if(V1->tipo == 'i' && V2->tipo == 'i'){
+      dummy->tipo = 'i';
       dummy->dato1 = (V1->dato1 *  V2->dato1);
-      printf("\n%d\n",dummy->dato1);
+      // printf("\n%d\n",dummy->dato1);
       return (void *) dummy;
     }
-  if(V1->tipo == 'a' && V2->tipo == 'b'){
-      dummy->tipo = 'b';
+  if(V1->tipo == 'i' && V2->tipo == 'd'){
+      dummy->tipo = 'd';
       dummy->dato2 = (V1->dato1 *  V2->dato2);
-      printf("\n%lf\n",dummy->dato2);
+      // printf("\n%lf\n",dummy->dato2);
       return (void *)dummy;
     }
-  if(V1->tipo == 'b' && V2->tipo == 'a'){
-      dummy->tipo = 'b';
+  if(V1->tipo == 'd' && V2->tipo == 'i'){
+      dummy->tipo = 'd';
       dummy->dato2 = (V1->dato2 * V2->dato1);
-      printf("\n%lf\n",dummy->dato2);
+      // printf("\n%lf\n",dummy->dato2);
       return (void *)dummy;
     }
-  if(V1->tipo == 'b' && V2->tipo == 'b'){
-      dummy->tipo = 'b';
+  if(V1->tipo == 'd' && V2->tipo == 'd'){
+      dummy->tipo = 'd';
       dummy->dato2 = (V1->dato2 * V2->dato2);
-      printf("\n%lf\n",dummy->dato2);
+      // printf("\n%lf\n",dummy->dato2);
       return (void *)dummy;
   }
-  if(V1->tipo == 'c' || V2->tipo == 'c'){
+  if(V1->tipo == 's' || V2->tipo == 's'){
     yyerror("No puedes multiplicar cadenas!");
+    return (void *)dummy;
+  }
+
+  yyerror("Tipos incompatibles");
+  return (void *)dummy;
+
+}
+
+void * dividirVariables(void * v1, void * v2){
+  if(v1 == NULL || v2 == NULL){  return NULL;  }
+  Nodo * V1 = (Nodo *) v1;
+  Nodo * V2 = (Nodo *) v2;
+  Nodo * dummy = (Nodo*)malloc(sizeof(Nodo));
+
+  if(V1->tipo == 'i' && V2->tipo == 'i'){
+      dummy->tipo = 'i';
+      dummy->dato1 = (V1->dato1 /  V2->dato1);
+      // printf("\n%d\n",dummy->dato1);
+      return (void *) dummy;
+    }
+  if(V1->tipo == 'i' && V2->tipo == 'd'){
+      dummy->tipo = 'd';
+      dummy->dato2 = (V1->dato1 /  V2->dato2);
+      // printf("\n%lf\n",dummy->dato2);
+      return (void *)dummy;
+    }
+  if(V1->tipo == 'd' && V2->tipo == 'i'){
+      dummy->tipo = 'd';
+      dummy->dato2 = (V1->dato2 / V2->dato1);
+      // printf("\n%lf\n",dummy->dato2);
+      return (void *)dummy;
+    }
+  if(V1->tipo == 'd' && V2->tipo == 'd'){
+      dummy->tipo = 'd';
+      dummy->dato2 = (V1->dato2 / V2->dato2);
+      // printf("\n%lf\n",dummy->dato2);
+      return (void *)dummy;
+  }
+  if(V1->tipo == 's' || V2->tipo == 's'){
+    yyerror("No puedes dividir cadenas!");
     return (void *)dummy;
   }
 
@@ -605,32 +640,32 @@ void * restarVariables(void * v1, void * v2){
   printf("V2 tipo: %c, valor: %d\n", V2->tipo, V2->dato1 );
 
 
-  if(V1->tipo == 'a' && V2->tipo == 'a'){
-      dummy->tipo = 'a';
+  if(V1->tipo == 'i' && V2->tipo == 'i'){
+      dummy->tipo = 'i';
       dummy->dato1 = (V1->dato1 -  V2->dato1);
       printf("\n%d\n",dummy->dato1);
       return (void *) dummy;
     }
-  if(V1->tipo == 'a' && V2->tipo == 'b'){
-      dummy->tipo = 'b';
+  if(V1->tipo == 'i' && V2->tipo == 'd'){
+      dummy->tipo = 'd';
       dummy->dato2 = (V1->dato1 -  V2->dato2);
       printf("\n%lf\n",dummy->dato2);
       return (void *)dummy;
     }
-  if(V1->tipo == 'b' && V2->tipo == 'a'){
-      dummy->tipo = 'b';
+  if(V1->tipo == 'd' && V2->tipo == 'i'){
+      dummy->tipo = 'd';
       dummy->dato2 = (V1->dato2 - V2->dato1);
       printf("\n%lf\n",dummy->dato2);
       return (void *)dummy;
     }
-  if(V1->tipo == 'b' && V2->tipo == 'b'){
-      dummy->tipo = 'b';
+  if(V1->tipo == 'd' && V2->tipo == 'd'){
+      dummy->tipo = 'd';
       dummy->dato2 = (V1->dato2 -  V2->dato2);
       printf("\n%lf\n",dummy->dato2);
       return (void *)dummy;
     }
-  if(V1->tipo == 'c' && V2->tipo == 'c'){
-      dummy->tipo = 'c';
+  if(V1->tipo == 's' && V2->tipo == 's'){
+      dummy->tipo = 's';
       dummy->dato3 = remstr(V1->dato3, V2->dato3);
       printf("\n%lf\n",dummy->dato3);
       return (void *)dummy;
@@ -644,9 +679,9 @@ void*  variableMasEntero(void* var, int a){
   Nodo* v_ = (Nodo *) var;
   Nodo * sumado = (Nodo*)malloc(sizeof(Nodo));
   switch (v_->tipo) {
-    case 'a': sumado->tipo = 'a'; sumado->dato1 = v_->dato1 + a; break;
-    case 'b': sumado->tipo = 'b'; sumado->dato2 = v_->dato2 + a; break;
-    // case 'c': sumado->tipo = 'd'; sumado->dato3 = concat(v_->dato3,c);printf("\n%s\n",sumado->dato3);break;
+    case 'i': sumado->tipo = 'i'; sumado->dato1 = v_->dato1 + a; break;
+    case 'd': sumado->tipo = 'd'; sumado->dato2 = v_->dato2 + a; break;
+    // case 's': sumado->tipo = 'd'; sumado->dato3 = concat(v_->dato3,c);printf("\n%s\n",sumado->dato3);break;
   }
   return (void*) sumado;
 }
@@ -655,9 +690,9 @@ void*  variableMasDouble(void* var, double a){
   Nodo* v_ = (Nodo *) var;
   Nodo * sumado = (Nodo*)malloc(sizeof(Nodo));
   switch (v_->tipo) {
-    case 'a': sumado->tipo = 'a'; sumado->dato1 = v_->dato1 + a; printWarning("Posible perdida de precisión real -> entero."); break;
-    case 'b': sumado->tipo = 'b'; sumado->dato2 = v_->dato2 + a; break;
-    // case 'c': sumado->tipo = 'd'; sumado->dato3 = concat(v_->dato3,c);printf("\n%s\n",sumado->dato3);break;
+    case 'i': sumado->tipo = 'i'; sumado->dato1 = v_->dato1 + a; printWarning("Posible perdida de precisión real -> entero."); break;
+    case 'd': sumado->tipo = 'd'; sumado->dato2 = v_->dato2 + a; break;
+    // case 's': sumado->tipo = 'd'; sumado->dato3 = concat(v_->dato3,c);printf("\n%s\n",sumado->dato3);break;
   }
   return (void*) sumado;
 }
@@ -667,9 +702,9 @@ void*  sumarAVariable(void* var, int a, double b){
   Nodo * sumado = (Nodo*)malloc(sizeof(Nodo));
 
   switch (v_->tipo) {
-    case 'a': sumado->tipo = 'a'; sumado->dato1 = v_->dato1 + a; break;
-    case 'b': sumado->tipo = 'b'; sumado->dato2 = v_->dato2 + b; break;
-    // case 'c': sumado->tipo = 'd'; sumado->dato3 = concat(v_->dato3,c);printf("\n%s\n",sumado->dato3);break;
+    case 'i': sumado->tipo = 'i'; sumado->dato1 = v_->dato1 + a; break;
+    case 'd': sumado->tipo = 'd'; sumado->dato2 = v_->dato2 + b; break;
+    // case 's': sumado->tipo = 'd'; sumado->dato3 = concat(v_->dato3,c);printf("\n%s\n",sumado->dato3);break;
   }
   return (void*) sumado;
 }
@@ -677,15 +712,15 @@ void*  sumarAVariable(void* var, int a, double b){
 void*  sumarAVariable_d(void* var, double a){
   Nodo* v_ = (Nodo *) var;
   Nodo * sumado = (Nodo*)malloc(sizeof(Nodo));
-  sumado->tipo = 'b';
+  sumado->tipo = 'd';
   sumado->dato2 = v_->dato2 + a;
   printf("\n%lf\n",sumado->dato2);
 
   //
   // switch (v_->tipo) {
-  //   case 'a': sumado->tipo = 'a'; sumado->dato1 = v_->dato1 + a; printf("\n%d\n",sumado->dato1);break;
-  //   case 'b': sumado->tipo = 'c'; sumado->dato2 = v_->dato2 + b; printf("\n%lf\n",sumado->dato2);break;
-  //   case 'c': sumado->tipo = 'd'; sumado->dato3 = concat(v_->dato3,c);printf("\n%s\n",sumado->dato3);break;
+  //   case 'i': sumado->tipo = 'i'; sumado->dato1 = v_->dato1 + a; printf("\n%d\n",sumado->dato1);break;
+  //   case 'd': sumado->tipo = 's'; sumado->dato2 = v_->dato2 + b; printf("\n%lf\n",sumado->dato2);break;
+  //   case 's': sumado->tipo = 'd'; sumado->dato3 = concat(v_->dato3,c);printf("\n%s\n",sumado->dato3);break;
   // }
   return (void*) sumado;
 }
@@ -697,7 +732,7 @@ void*  variableMasCadena(void* var, char* s, int orden){
   //orden 2 -> var + cadena
   Nodo* v_ = (Nodo *) var;
   Nodo * concatenado = (Nodo*)malloc(sizeof(Nodo));
-  concatenado->tipo = 'c';
+  concatenado->tipo = 's';
   if(orden == 1){
     concatenado->dato3 = concat(v_->dato3, s);
   }else{
@@ -712,39 +747,48 @@ void*  variablePorDouble(void* var, double a){
   Nodo* v_ = (Nodo *) var;
   Nodo * mul = (Nodo*)malloc(sizeof(Nodo));
   switch (v_->tipo) {
-    case 'a': mul->tipo = 'a'; mul->dato1 = v_->dato1 * a; break;
-    case 'b': mul->tipo = 'b'; mul->dato2 = v_->dato2 * a; break;
-    // case 'c': mul->tipo = 'd'; mul->dato3 = concat(v_->dato3,c);printf("\n%s\n",mul->dato3);break;
+    case 'i': mul->tipo = 'i'; mul->dato1 = v_->dato1 * a; break;
+    case 'd': mul->tipo = 'd'; mul->dato2 = v_->dato2 * a; break;
+    // case 's': mul->tipo = 'd'; mul->dato3 = concat(v_->dato3,c);printf("\n%s\n",mul->dato3);break;
   }
   return (void*) mul;
 }
 
-void*  variablePorEntero(void* var, int a){
-  Nodo* v_ = (Nodo *) var;
-  Nodo * sumado = (Nodo*)malloc(sizeof(Nodo));
-  switch (v_->tipo) {
-    case 'a': sumado->tipo = 'a'; sumado->dato1 = v_->dato1 * a; break;
-    case 'b': sumado->tipo = 'b'; sumado->dato2 = v_->dato2 * a; break;
-    // case 'c': sumado->tipo = 'd'; sumado->dato3 = concat(v_->dato3,c);printf("\n%s\n",sumado->dato3);break;
-  }
-  return (void*) sumado;
-}
 
+void*  variableEntreDouble(void* var, double a, int orden){
+  Nodo* v_ = (Nodo *) var;
+  Nodo * dividido = (Nodo*)malloc(sizeof(Nodo));
+  if(orden == 1){
+    switch (v_->tipo) {
+      case 'i': dividido->tipo = 'i'; dividido->dato1 = v_->dato1 / a; printWarning("Posible perdida de precisión real -> entero."); break;
+      case 'd': dividido->tipo = 'd'; dividido->dato2 = v_->dato2 / a; break;
+      // case 's': dividido->tipo = 'd'; dividido->dato3 = concat(v_->dato3,c);printf("\n%s\n",dividido->dato3);break;
+    }
+  }else{
+    switch (v_->tipo) {
+      case 'i': dividido->tipo = 'i'; dividido->dato1 = a / v_->dato1; printWarning("Posible perdida de precisión real -> entero."); break;
+      case 'd': dividido->tipo = 'd'; dividido->dato2 = a / v_->dato2; break;
+      // case 's': dividido->tipo = 'd'; dividido->dato3 = concat(v_->dato3,c);printf("\n%s\n",dividido->dato3);break;
+    }
+  }
+
+  return (void*) dividido;
+}
 
 void*  variableMenosNumero(void* var, double a, int orden){
   Nodo* v_ = (Nodo *) var;
   Nodo * sumado = (Nodo*)malloc(sizeof(Nodo));
   if(orden == 1){
     switch (v_->tipo) {
-      case 'a': sumado->tipo = 'a'; sumado->dato1 = v_->dato1 - a; break;
-      case 'b': sumado->tipo = 'b'; sumado->dato2 = v_->dato2 - a; break;
-      // case 'c': sumado->tipo = 'd'; sumado->dato3 = concat(v_->dato3,c);printf("\n%s\n",sumado->dato3);break;
+      case 'i': sumado->tipo = 'i'; sumado->dato1 = v_->dato1 - a; break;
+      case 'd': sumado->tipo = 'd'; sumado->dato2 = v_->dato2 - a; break;
+      // case 's': sumado->tipo = 'd'; sumado->dato3 = concat(v_->dato3,c);printf("\n%s\n",sumado->dato3);break;
     }
   }else{
     switch (v_->tipo) {
-      case 'a': sumado->tipo = 'a'; sumado->dato1 = a - v_->dato1; break;
-      case 'b': sumado->tipo = 'b'; sumado->dato2 = a - v_->dato2; break;
-      // case 'c': sumado->tipo = 'd'; sumado->dato3 = concat(v_->dato3,c);printf("\n%s\n",sumado->dato3);break;
+      case 'i': sumado->tipo = 'i'; sumado->dato1 = a - v_->dato1; break;
+      case 'd': sumado->tipo = 'd'; sumado->dato2 = a - v_->dato2; break;
+      // case 's': sumado->tipo = 'd'; sumado->dato3 = concat(v_->dato3,c);printf("\n%s\n",sumado->dato3);break;
     }
   }
 
@@ -759,7 +803,7 @@ void*  variableMenosCadena(void* var, char* s, int orden){
   s = quitarComillas(s);
   Nodo* v_ = (Nodo *) var;
   Nodo * concatenado = (Nodo*)malloc(sizeof(Nodo));
-  concatenado->tipo = 'c';
+  concatenado->tipo = 's';
   if(orden == 1){
     // printf("Cadena1: %s\n", v_->dato3);
     // printf("Cadena2: %s\n", s);
@@ -772,20 +816,20 @@ void*  variableMenosCadena(void* var, char* s, int orden){
   return (void*) concatenado;
 }
 
-void*  variablePotencia(void* var, double a, int orden){
+void*  variablePotenciaDouble(void* var, double a, int orden){
   Nodo* v_ = (Nodo *) var;
   Nodo * pot = (Nodo*)malloc(sizeof(Nodo));
   if(orden == 1){
     switch (v_->tipo) {
-      case 'a': pot->tipo = 'a'; pot->dato1 = pow(v_->dato1, a); break;
-      case 'b': pot->tipo = 'b'; pot->dato2 = pow(v_->dato2, a); break;
-      // case 'c': pot->tipo = 'd'; pot->dato3 = concat(v_->dato3,c);printf("\n%s\n",pot->dato3);break;
+      case 'i': pot->tipo = 'i'; pot->dato1 = pow(v_->dato1, a); break;
+      case 'd': pot->tipo = 'd'; pot->dato2 = pow(v_->dato2, a); break;
+      // case 's': pot->tipo = 'd'; pot->dato3 = concat(v_->dato3,c);printf("\n%s\n",pot->dato3);break;
     }
   }else{
     switch (v_->tipo) {
-      case 'a': pot->tipo = 'a'; pot->dato1 = pow(a, v_->dato1); break;
-      case 'b': pot->tipo = 'b'; pot->dato2 = pow(a, v_->dato2); break;
-      // case 'c': pot->tipo = 'd'; pot->dato3 = concat(v_->dato3,c);printf("\n%s\n",pot->dato3);break;
+      case 'i': pot->tipo = 'i'; pot->dato1 = pow(a, v_->dato1); break;
+      case 'd': pot->tipo = 'd'; pot->dato2 = pow(a, v_->dato2); break;
+      // case 's': pot->tipo = 'd'; pot->dato3 = concat(v_->dato3,c);printf("\n%s\n",pot->dato3);break;
     }
   }
 
@@ -797,31 +841,31 @@ void*  variablePotenciaVariable(void* v1, void* v2){
   Nodo * V2 = (Nodo *) v2;
   Nodo * dummy = (Nodo*)malloc(sizeof(Nodo));
 
-  if(V1->tipo == 'a' && V2->tipo == 'a'){
-      dummy->tipo = 'a';
+  if(V1->tipo == 'i' && V2->tipo == 'i'){
+      dummy->tipo = 'i';
       dummy->dato1 = pow(V1->dato1, V2->dato1);
       // printf("\n%d\n",dummy->dato1);
       return (void *) dummy;
     }
-  if(V1->tipo == 'a' && V2->tipo == 'b'){
-      dummy->tipo = 'b';
+  if(V1->tipo == 'i' && V2->tipo == 'd'){
+      dummy->tipo = 'd';
       dummy->dato2 = pow(V1->dato1, V2->dato2);
       // printf("\n%lf\n",dummy->dato2);
       return (void *)dummy;
     }
-  if(V1->tipo == 'b' && V2->tipo == 'a'){
-      dummy->tipo = 'b';
+  if(V1->tipo == 'd' && V2->tipo == 'i'){
+      dummy->tipo = 'd';
       dummy->dato2 = pow(V1->dato2, V2->dato1);
       // printf("\n%lf\n",dummy->dato2);
       return (void *)dummy;
     }
-  if(V1->tipo == 'b' && V2->tipo == 'b'){
-      dummy->tipo = 'b';
+  if(V1->tipo == 'd' && V2->tipo == 'd'){
+      dummy->tipo = 'd';
       dummy->dato2 = pow(V1->dato2, V2->dato2);
       // printf("\n%lf\n",dummy->dato2);
       return (void *)dummy;
   }
-  if(V1->tipo == 'c' || V2->tipo == 'c'){
+  if(V1->tipo == 's' || V2->tipo == 's'){
     yyerror("Operación no definida!");
     return (void *)dummy;
   }
@@ -837,14 +881,14 @@ void * variableModVariable(void* v1, void* v2){
   Nodo * V2 = (Nodo *) v2;
   Nodo * dummy = (Nodo*)malloc(sizeof(Nodo));
 
-  if(V1->tipo == 'a' && V2->tipo == 'a'){
-      dummy->tipo = 'a';
+  if(V1->tipo == 'i' && V2->tipo == 'i'){
+      dummy->tipo = 'i';
       dummy->dato1 = V1->dato1 % V2->dato1;
       // printf("\n%d\n",dummy->dato1);
       return (void *) dummy;
     }
 
-  if(V1->tipo != 'a' && V2->tipo != 'a'){
+  if(V1->tipo != 'i' && V2->tipo != 'i'){
     yyerror("Operación no definida!");
     return (void *)dummy;
   }
@@ -859,14 +903,14 @@ void * variableModEntero(void* var, int a, int orden){
   Nodo * pot = (Nodo*)malloc(sizeof(Nodo));
   if(orden == 1){
     switch (v_->tipo) {
-      case 'a': pot->tipo = 'a'; pot->dato1 = v_->dato1 % a; break;
+      case 'i': pot->tipo = 'i'; pot->dato1 = v_->dato1 % a; break;
     }
   }else{
     switch (v_->tipo) {
-      case 'a': pot->tipo = 'a'; pot->dato1 = a % v_->dato1; break;
+      case 'i': pot->tipo = 'i'; pot->dato1 = a % v_->dato1; break;
     }
   }
-  if(v_->tipo == 'b' || v_->tipo == 'c'){
+  if(v_->tipo == 'd' || v_->tipo == 's'){
     yyerror("Operación no definida!");
   }
   return (void*) pot;

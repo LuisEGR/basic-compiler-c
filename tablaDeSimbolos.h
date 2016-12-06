@@ -37,11 +37,13 @@ void   setDoubleValue(char* nombre, double dato);
 void   setIntegerValue(char* nombre, int dato);
 
 //Funciones para obtener los datos de las variables
-void*  getVariable(char* nombre);
-void  showVar(void* var);
+void * getVariable(char* nombre);
+void   showVar(void* var);
+int    existe (char* nombre);
+void   actualizar(char* nombre, double dato);
+char * quitarComillas(char* x);
 
-
-//Funciones iniciales aqui mandamos a llamar a la funcion existe y des. insertar
+//Funciones iniciales
 void   createDouble(char* nombre, double dato);
 void   createString(char* nombre, char* dato);
 void   createInteger(char* nombre, int dato);
@@ -49,35 +51,29 @@ void   copyValueInteger(char* nombre, void* var);
 void   copyValueDouble(char* nombre, void* var);
 void   copyValueString(char* nombre, void* var);
 void   copyValueVar(void* source, void* dest);
+
+//Operaciones enter variables
 void * sumarVariables(void * var1, void * var2);
 void * restarVariables(void * var1, void * var2);
 void * multiplicarVariables(void * var1, void * var2);
-
-
-int    existe (char* nombre);				//Funcion para saber si una variable ya existe o no
-void   actualizar(char* nombre, double dato);
-char   getipo(char* nombre);
-char * quitarComillas(char* x);
-
-void*  sumarAVariable(void* var, int a, double b);
-void*  sumarAVariable_d(void* var, double a);
-void*  variableMasEntero(void* var, int a);
-void*  variableMasDouble(void* var, double a);
-void*  variableMasCadena(void* var, char* s, int orden);
-
-void*  variableMenosNumero(void* var, double a, int orden);
-void*  variableMenosCadena(void* var, char* s, int orden);
-
-void*  variablePorEntero(void* var, int a);
-void*  variablePorDouble(void* var, double a);
-
-void*  variablePotencia(void* var, double a, int orden);
-void*  variablePotenciaVariable(void* v1, void* v2);
-
+void * dividirVariables(void * var1, void * var2);
+void * variablePotenciaVariable(void* v1, void* v2);
 void * variableModVariable(void* v1, void* v2);
+
+void * sumarAVariable(void* var, int a, double b);
+void * sumarAVariable_d(void* var, double a);
+void * variableMasEntero(void* var, int a);
+void * variableMasDouble(void* var, double a);
+void * variableMasCadena(void* var, char* s, int orden);
+void * variableMenosNumero(void* var, double a, int orden);
+void * variableMenosCadena(void* var, char* s, int orden);
+
+void * variablePorDouble(void* var, double a);
+void * variableEntreDouble(void* var, double a, int orden);
+void * variablePotenciaDouble(void* var, double a, int orden);
 void * variableModEntero(void* var, int a, int orden);
 
-
+// Funciones auxiliares para impresión de texto con color.
 void printError(char * m);
 void printWarning(char * m);
 

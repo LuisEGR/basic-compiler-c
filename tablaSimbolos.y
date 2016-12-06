@@ -67,11 +67,11 @@ declarar:
 		INT VARIABLE ';'							{ int aux = 0; createInteger($2, aux);  }
 	| INT VARIABLE '=' opvar ';'		{ _copyValueInteger($2, $4); }
 	| INT VARIABLE '=' opint ';' 		{ int aux = $4; createInteger($2, aux);}
-	| INT VARIABLE '=' opdob ';' 		{ int aux = $4; createInteger($2, aux);}
+	| INT VARIABLE '=' opdob ';' 		{ int aux = $4; createInteger($2, aux); printWarning("Posible perdida de precisión real -> entero");}
 
 	| DOUBLE VARIABLE ';'						{ createDouble($2, 0.0);}
 	| DOUBLE VARIABLE '=' opint ';'	{ createDouble($2, $4);}
-	| DOUBLE VARIABLE '=' opdob ';'	{ createDouble($2, $4); printWarning("Posible perdida de precisión real -> entero");}
+	| DOUBLE VARIABLE '=' opdob ';'	{ createDouble($2, $4); }
 	| DOUBLE VARIABLE '=' opvar ';'	{ _copyValueDouble($2, $4);}
 
 	| STRING VARIABLE ';'						{ createString($2, "");}
@@ -83,7 +83,7 @@ declarar:
 
 asignar:
 	VARIABLE '=' opvar ';'{
-		//printf("Asignacion de variable con op.variable\n");
+		// printf("Asignacion de variable con op.variable\n");
 		if(existe($1)){
 			// printf("Existe!\n" );
 			void* V1 = getVariable($1);
@@ -94,7 +94,7 @@ asignar:
 			}
 		}else{
 			// getVariable($1);
-			printf(BLUE "No existe la variable '%s'! %s\n", $1, RESETCOL );
+			printf(BLUE "No existe la variable '%s'! %s\n>", $1, RESETCOL );
 
 			// printf("Alguna variable no existe \n>>");
 		}
@@ -104,7 +104,7 @@ asignar:
 			if(aux==1){
 				setIntegerValue($1, $3);
 			}else{
-				printf("2 No existe la variable %s\n>>", $1);
+				printf(BLUE "No existe la variable '%s'! %s\n>", $1, RESETCOL );
 			}
 		}
 	| VARIABLE '=' opdob ';'		{
@@ -112,14 +112,14 @@ asignar:
 			if(aux==1){
 				actualizar($1, $3);
 			}else{
-				printf("3 No existe la variable\n>>");
+				printf(BLUE "No existe la variable '%s'! %s\n>", $1, RESETCOL );
 			}
 		}
 	| VARIABLE '=' opchar ';'		{
 			if(existe($1)){
 				setStringValue($1, $3);
 			}else{
-				printf("4 No existe la variable\n>>");
+				printf(BLUE "No existe la variable '%s'! %s\n>", $1, RESETCOL );
 			}
 		}
 ;
@@ -146,18 +146,25 @@ opvar: VARIABLE						{ $$ = getVariable($1);}//Acceder a una variable de la tabl
 			| opvar  '*' opvar 	{ $$ = multiplicarVariables($1, $3);}
 			| opvar  '*' opdob 	{ $$ = variablePorDouble($1, $3);}
 			| opdob  '*' opvar 	{ $$ = variablePorDouble($3, $1);}
-			| opvar  '*' opint 	{ $$ = variablePorEntero($1, $3);}
-			| opint  '*' opvar 	{ $$ = variablePorEntero($3, $1);}
+			| opvar  '*' opint 	{ $$ = variablePorDouble($1, $3);}
+			| opint  '*' opvar 	{ $$ = variablePorDouble($3, $1);}
+
+			| opvar '/' opvar			{ $$ = dividirVariables($1, $3);}
+			| opvar '/' opint			{ $$ = variableEntreDouble($1, $3, 1);}
+			| opint '/' opvar			{ $$ = variableEntreDouble($3, $1, 2);}
+			| opvar '/' opdob			{ $$ = variableEntreDouble($1, $3, 1);}
+			| opdob '/' opvar			{ $$ = variableEntreDouble($3, $1, 2);}
 
 			| opvar '^' opvar			{ $$ = variablePotenciaVariable($1, $3);}
-			| opvar '^' opint			{ $$ = variablePotencia($1, $3, 1);}
-			| opint '^' opvar			{ $$ = variablePotencia($3, $1, 2);}
-			| opvar '^' opdob			{ $$ = variablePotencia($1, $3, 1);}
-			| opdob '^' opvar			{ $$ = variablePotencia($3, $1, 2);}
+			| opvar '^' opint			{ $$ = variablePotenciaDouble($1, $3, 1);}
+			| opint '^' opvar			{ $$ = variablePotenciaDouble($3, $1, 2);}
+			| opvar '^' opdob			{ $$ = variablePotenciaDouble($1, $3, 1);}
+			| opdob '^' opvar			{ $$ = variablePotenciaDouble($3, $1, 2);}
 
 			| opvar '%' opvar			{ $$ = variableModVariable($1, $3);}
 			| opvar '%' opint			{ $$ = variableModEntero($1, $3, 1);}
 			| opint '%' opvar			{ $$ = variableModEntero($3, $1, 2);}
+
 
 
 ;
@@ -183,7 +190,7 @@ opchar:
 //Producciones de tipo doble
 opdob:
 		// opint								{ $$ = $1; }
-	 REAL								{ $$ = $1; }
+	 REAL									{ $$ = $1; }
 	| '-' REAL						{ $$ = (-1)*$2; }
 	| opdob '+' opdob		  { $$ = $1 + $3; }
 	| opdob '-' opdob    	{ $$ = $1 - $3;	}
@@ -219,22 +226,44 @@ errores:
 	| STRING VARIABLE '=' opchar 			{ printError("ERROR - Se esperaba Token ';' ");}
 	| DOUBLE VARIABLE 								{ printError("ERROR - Se esperaba Token ';' ");}
 	| DOUBLE VARIABLE '=' opdob 			{ printError("ERROR - Se esperaba Token ';' ");}
-	| VARIABLE '=' VARIABLE						{ printError("ERROR - Se esperaba Token ';' ");}
-	// | VARIABLE '=' opint							{ printError("ERROR - Se esperaba Token ';' ");}
+	| VARIABLE '=' opvar							{ printError("ERROR - Se esperaba Token ';' ");}
+	| VARIABLE '=' opint							{ printError("ERROR - Se esperaba Token ';' ");}
 	| VARIABLE '=' opdob							{ printError("ERROR - Se esperaba Token ';' ");}
 	| VARIABLE '=' opchar							{ printError("ERROR - Se esperaba Token ';' ");}
 	| STRING VARIABLE '=' opint ';'		{ printError("ERROR - No se puede asignar un entero a un string ");}
 	| STRING VARIABLE '=' opdob ';'		{ printError("ERROR - Conflicto de tipos ");}
 	| INT VARIABLE '=' opchar ';'			{ printError("ERROR - Conflicto de tipos ");}
 	| DOUBLE VARIABLE '=' opchar ';'	{ printError("ERROR - Conflicto de tipos ");}
-	| VARIABLE '=' opint ';' VARIABLE	{ printError("Texto no reconocido despues del Token ';' ");}
-	| VARIABLE '=' opdob ';' VARIABLE	{ printError("Texto no reconocido despues del Token ';' ");}
-	| VARIABLE '=' opchar ';' VARIABLE{ printError("Texto no reconocido despues del Token ';' ");}
+
+	| opint '=' opint ';' 						{ printError("Asignación inválida!");}
+	| opint '=' opchar ';'					  { printError("Asignación inválida!");}
+	| opint '=' opvar ';' 					  { printError("Asignación inválida!");}
+	| opint '=' opdob ';' 					  { printError("Asignación inválida!");}
+
+	| opdob '=' opint ';' 						{ printError("Asignación inválida!");}
+	| opdob '=' opdob ';' 						{ printError("Asignación inválida!");}
+	| opdob '=' opchar';'					 		{ printError("Asignación inválida!");}
+	| opdob '=' opvar ';' 					  { printError("Asignación inválida!");}
+
+	| opchar '=' opint ';' 						{ printError("Asignación inválida!");}
+	| opchar '=' opdob ';' 						{ printError("Asignación inválida!");}
+	| opchar '=' opchar';'					 	{ printError("Asignación inválida!");}
+	| opchar '=' opvar ';' 					  { printError("Asignación inválida!");}
+
 	| opvar  '*' opchar							  {	printError("Operación no definida");}
+	| opvar  '/' opchar							  {	printError("Operación no definida");}
+	| opvar  '^' opchar							  {	printError("Operación no definida");}
+	| opvar  '%' opchar							  {	printError("Operación no definida");}
+
 	| opchar  '*' opvar							  {	printError("Operación no definida");}
+	| opchar  '/' opvar							  {	printError("Operación no definida");}
+	| opchar  '^' opvar							  {	printError("Operación no definida");}
+	| opchar  '%' opvar							  {	printError("Operación no definida");}
+
 	| opdob   '%' opdob							  {	printError("Operación no definida");}
 	| opdob   '%' opint							  {	printError("Operación no definida");}
 	| opint   '%' opdob							  {	printError("Operación no definida");}
+	| opchar  '%' opchar							{	printError("Operación no definida");}
 	| ';'															{  }
 ;
 
